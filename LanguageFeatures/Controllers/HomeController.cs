@@ -1,6 +1,8 @@
 ﻿using System.Web.Mvc;
 using LanguageFeatures.Models;
 using System.Collections.Generic;
+using System;
+using System.Threading.Tasks;
 
 namespace LanguageFeatures.Controllers
 {
@@ -68,7 +70,16 @@ namespace LanguageFeatures.Controllers
 				}
 			};
 
-			return View("Result", (object)string.Format("Total in Soccer: {0:c}", products.FilterByCategory("Soccer").TotalPrices()));
+			Func<Product, bool> categoryFilter = x => x.Category == "Soccer";
+
+			return View("Result", (object)string.Format("Total in Soccer: {0:c}", products.Filter(categoryFilter).TotalPrices()));
         }
+
+		public ViewResult GetPageLength()
+		{
+			Task<long?> task = MyAsyncMethods.GetPageLength();
+
+			return View("Result", (object)string.Format("Length: {0}", task.Result));
+		}
 	}
 }

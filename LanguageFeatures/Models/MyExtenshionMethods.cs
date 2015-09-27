@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LanguageFeatures.Models
@@ -14,6 +15,13 @@ namespace LanguageFeatures.Models
 		{
 			foreach (Product product in productEnum)
 				if (product.Category == categoryParams)
+					yield return product;
+		}
+
+		public static IEnumerable<Product> Filter(this IEnumerable<Product> productEnum, Func<Product, bool> selectorParam)
+		{
+			foreach (Product product in productEnum)
+				if (selectorParam(product))
 					yield return product;
 		}
 	}
